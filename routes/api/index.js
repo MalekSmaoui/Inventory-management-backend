@@ -1,9 +1,24 @@
 const express = require('express');
 const router = express.Router();
+const marques = require('./marque');
+const users = require('./users'); 
+const pieces = require('./piece');  
+const modeles = require('./modele');  
+const annees = require('./annee'); 
+const finitions = require('./finition');  
+const categories = require('./categorie');
+const catalogue = require('./catalogue');  
+const vente = require('./vente');  
+const client = require('./client');  
 
-const users = require('./users');   
-
-
-
+router.use('/clients',client);
+router.use('/ventes',vente);
+router.use('/catalogues',catalogue);
+router.use('/categories',categories);
+router.use('/finitions',finitions);
+router.use('/annees',annees);
+router.use('/pieces', pieces);
+router.use('/marques', marques);
 router.use('/users', users);
+router.use('/modeles', modeles);
 module.exports = router;

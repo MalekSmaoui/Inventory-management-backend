@@ -5,8 +5,8 @@ const { verifySignUp } = require("../../../middlewares");
 const controller = require("../../../controllers/auth.controller");
 const controlleruser = require("../../../controllers/user.controller");
 const { authJwt } = require("../../../middlewares");
-
-
+const config = require("../../../config/auth.config");
+const jwt = require("jsonwebtoken")
 
 router.post(
     '/auth/signup',
@@ -19,9 +19,11 @@ router.post(
 
 //authentication routes
 router.post('/auth/signin', controller.signin)
-router.get('/confirm_user/:username',controller.confirm)
+router.put('/confirm_user/:username',controller.confirm)
+router.put('/block_user/:username',controller.block)
 router.post('/auth/signout', controller.signout)
-
+router.get('/auth/allusers', controller.getAll)
+router.get('/auth/UserById/:id', controller.getUserById)
 //user routes
 router.get('/test/all', controlleruser.allAccess)
 router.get(
@@ -34,6 +36,31 @@ router.get(
   [authJwt.verifyToken, authJwt.isAdmin],
   controlleruser.adminBoard
 )
-
+router.get('/me', async (req, res) => {
+  try {
+      // You can access the user's ID from the request object, assuming your JWT middleware sets it there
+      const token = req.cookies.serviceToken;
+      jwt.verify(token, config.secret, async (err, decoded) => {
+        if (err) {
+          return res.status(401).json({ message: 'Unauthorized!' });
+        }
+    
+        const userId = decoded.id;
+    
+        // Fetch user details from your database based on the userId
+        const user = await userModel.findById(userId); // Implement this function to retrieve user details
+    
+        if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+    
+        // Respond with the user's details
+        res.status(200).json({ user });
+      });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 module.exports = router

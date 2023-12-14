@@ -17,10 +17,7 @@ exports.signup = (req, res) => {
         if (err) {
           res.status(500).send({ message: err });
           return;
-        }
-    
-    
-    
+        }    
         if (req.body.roles) {
           Role.find(
             {
@@ -66,7 +63,21 @@ exports.signup = (req, res) => {
   };
   
 
-
+exports.getAll = async (req, res) => {
+  try {
+    const users = await User.find();
+    const usersWithRoles = await Promise.all(users.map(async (user) => {
+        const roles = await Role.find({ _id: { $in: user.roles } }, 'name');
+        return {
+            ...user._doc,
+            roles: roles.map(role => role.name)
+        };
+    }));
+    res.json(usersWithRoles);
+} catch (err) {
+    res.status(400).json('Error: ' + err);
+}
+};
 exports.confirm = (req, res) => {
   User.findOne({
     username: req.params.username,
@@ -91,7 +102,30 @@ exports.confirm = (req, res) => {
     })
     .catch((e) => console.log("error", e));
 };
-
+exports.block = (req, res) => {
+  User.findOne({
+    username: req.params.username,
+  })
+    .then((user) => {
+      if (!user) {
+        return res.send({
+          message: "User not found !",
+        });
+      } else if (user && user.accountStatus == false) {
+        return res.send({
+          message: "Votre compte est déja blocké !",
+        });
+      } else {
+        user.accountStatus = false;
+        user.save((err) => {
+          return res.send({
+            message: "le compte est blocké avec succées !",
+          });
+        });
+      }
+    })
+    .catch((e) => console.log("error", e));
+};
 
 exports.signin = (req, res) => {
   User.findOne({
@@ -118,19 +152,15 @@ exports.signin = (req, res) => {
       }
 
      if (user.accountStatus === false) {
-        return res.status(401).send({message : "Account not activated. Please Consult Mr.agrebi."});
+        return res.status(401).send({message : "Account not activated. Please Consult Mr.Smaoui."});
       }
 
       var token = jwt.sign({ id: user.id }, config.secret, {
         expiresIn: 86400, // 24 hours
       });
 
-      var authorities = [];
-
-      for (let i = 0; i < user.roles.length; i++) {
-        authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-      }
-
+      var authorities = user.roles.map(role => "ROLE_" + role.name.toUpperCase());
+      console.log(user.roles);
       req.session.token = token;
 
       res.status(200).send({
@@ -150,3 +180,17 @@ exports.signout = async (req, res) => {
     this.next(err);
   }
 };
+exports.getUserById= (req, res) => {
+  const { id } = req.params;
+
+  User.findById(id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ error: 'user not found.' });
+      }
+      res.json(user);
+    })
+    .catch((error) => {
+      res.status(500).json({ error: 'An error occurred while retrieving the user.' });
+    });
+}
