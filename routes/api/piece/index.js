@@ -19,11 +19,17 @@ const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, './uploads/');
     },
-    filename: function (req, file, cb) {
-      const ext = file.originalname.split('.').pop();
-      const fileName = `${Date.now()}_${generateRandomString(8)}.${ext}`;
-      cb(null, fileName);
-    },
+    filename : function (req, file, cb) {
+  const ext = file.originalname.split('.').pop();
+  const validExtensions = ['jpg', 'jpeg'];
+
+  if (!validExtensions.includes(ext.toLowerCase())) {
+    return cb(new Error('Invalid file extension'));
+  }
+
+  const fileName = `${Date.now()}_${generateRandomString(8)}.jpg`;
+  cb(null, fileName);
+},
   });
 const upload = multer({ storage: storage }).array('images', 5);
 /////

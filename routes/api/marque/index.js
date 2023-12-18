@@ -6,13 +6,28 @@ const Marque = require('../../../models/marque');
 //for image path cause we don't have acces to local directory from front
 const path = require('path');
 // Multer configuration
+function generateRandomString(length) {
+  const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, './uploads/');
     },
-    filename: function (req, file, cb) {
+    filename : function (req, file, cb) {
       const ext = file.originalname.split('.').pop();
-      const fileName = Date.now() +'.'+ ext;
+      const validExtensions = ['jpg', 'jpeg'];
+    
+      if (!validExtensions.includes(ext.toLowerCase())) {
+        return cb(new Error('Invalid file extension'));
+      }
+    
+      const fileName = `${Date.now()}_${generateRandomString(8)}.jpg`;
       cb(null, fileName);
     },
   });
