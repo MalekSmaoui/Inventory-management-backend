@@ -67,6 +67,9 @@ router.post('/AddNewPiece', (req, res) => {
         req.files.forEach((file, index) => {
             console.log(`File ${index + 1}: ${file.originalname}`);
         });
+        if (finition == null || categorie == null) {
+          return res.status(404).json('Both finition and categorie required');
+      }
         const newPiece = new pieces({
             name,
             modele,

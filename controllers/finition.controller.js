@@ -48,8 +48,13 @@ exports.getAll = (req, res) => {
   // POST
   exports.addNew = (req, res) => {
       const { modele,anneee,finition,couleur,boitev,typecarro,typemoteur,carburant,annee } = req.body;
+      
+      if (annee == null) {
+        return res.status(404).json('Annee is required');
+    }
+      
       const finitionValue = finition.trim() !== '' ? finition : 'Pas de finition';
-
+      
       const newFinition = new finitions({
         modele,
         anneee,
@@ -62,14 +67,13 @@ exports.getAll = (req, res) => {
         annee,
         // other piece attributes
       });
-    
+     
       newFinition
         .save()
         .then((finition) => {
           res.status(201).json(finition);
         })
-        .catch((error) => {
-          res.status(500).json({ error: 'An error occurred while adding a new piece.' });
-        });
+        .catch(err => res.status(400).json('Error: ' + err ))
+        
   }
   
