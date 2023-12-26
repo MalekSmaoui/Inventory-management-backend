@@ -154,7 +154,15 @@ exports.signin = (req, res) => {
      if (user.accountStatus === false) {
         return res.status(401).send({message : "Account not activated. Please Consult Mr.Smaoui."});
       }
-
+      
+      
+      req.session.user = {
+        id: user._id,
+        username: user.username,
+        roles: user.roles.map((role) => role.name),
+      };
+      
+      
       var token = jwt.sign({ id: user.id }, config.secret, {
         expiresIn: 86400, // 24 hours
       });

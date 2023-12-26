@@ -43,8 +43,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 app.use(
     cookieSession({
-      name: 'agrebi-session',
-      secret: 'COOKIE_SECRET', // should use as secret environment variable
+      name: 'serviceToken',
+      secret: 'agrebi-secret-key', // should use as secret environment variable
       httpOnly: true,
     }),
   )

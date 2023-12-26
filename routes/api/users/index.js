@@ -39,9 +39,25 @@ router.get(
 router.get('/me', async (req, res) => {
   try {
       // You can access the user's ID from the request object, assuming your JWT middleware sets it there
+      res.header('Access-Control-Allow-Credentials', true);
+      
+      const authHeader = req.headers.authorization; 
+      console.log(authHeader);
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ message: 'Unauthorized!' });
+      }
+  
+      const token2 = authHeader.split(' ')[1];
+      console.log(token2);  
+      
       const token = req.cookies.serviceToken;
-      jwt.verify(token, config.secret, async (err, decoded) => {
+      //const t = req.session.token;
+      //console.log(t);
+      console.log(token);
+      console.log(config.secret);
+      jwt.verify(token2, config.secret, async (err, decoded) => {
         if (err) {
+          //console.error(err);
           return res.status(401).json({ message: 'Unauthorized!' });
         }
     

@@ -10,7 +10,10 @@ const categories = require('./categorie');
 const catalogue = require('./catalogue');  
 const vente = require('./vente');  
 const client = require('./client');  
-
+const facture = require('./facture'); 
+const factureitems = require('./factureitems'); 
+router.use('/facturesitems',factureitems);
+router.use('/factures',facture);
 router.use('/clients',client);
 router.use('/ventes',vente);
 router.use('/catalogues',catalogue);
