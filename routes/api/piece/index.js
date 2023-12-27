@@ -40,7 +40,7 @@ router.get('/images/:filename', async (req, res) => {
   
       // Construct the absolute path to the image file
       const imagePath = path.join(__dirname,'..','..','..', 'uploads',filename);
-
+      
       // Send the image file as the response
       res.sendFile(imagePath);
       
