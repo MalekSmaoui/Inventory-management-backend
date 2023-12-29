@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
     },
     filename : function (req, file, cb) {
   const ext = file.originalname.split('.').pop();
-  const validExtensions = ['jpg', 'jpeg'];
+  const validExtensions = ['jpg', 'jpeg', 'png'];
 
   if (!validExtensions.includes(ext.toLowerCase())) {
     return cb(new Error('Invalid file extension'));
@@ -56,7 +56,8 @@ router.get('/PieceById/:id', controller.getById)
 // search by name
 router.get('/SearchByFinitionAndCatalogue/:finitionId/:catalogueId', controller.searchByFinitionAndCatalogue)
 // add piece
-
+// delete exercise by ID
+router.delete('/delete/:id', controller.deleteById)
 router.post('/AddNewPiece', (req, res) => {
     console.log('Received request to add new piece');
     upload(req, res, async (err) => {

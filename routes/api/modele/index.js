@@ -10,4 +10,6 @@ router.get('/SearchByBrandId/:brandName', controller.searchByBrand)
 // add piece
 router.post('/AddNewModele',controller.addNew)
 
+// delete exercise by ID
+router.delete('/delete/:id', controller.deleteById)
 module.exports = router 

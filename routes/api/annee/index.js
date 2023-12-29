@@ -11,4 +11,7 @@ router.get('/annees', controller.getAll)
 // search by name
 router.get('/SearchByModeleId/:modeleName', controller.searchByModel)
 router.post('/AddNewAnnee',controller.addNew)
+
+// delete exercise by ID
+router.delete('/delete/:id', controller.deleteById)
 module.exports = router

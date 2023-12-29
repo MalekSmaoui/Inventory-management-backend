@@ -84,3 +84,16 @@ exports.addNew = async (req, res) => {
   }
 };
 // DELETE
+// DELETE
+exports.deleteById = (req, res) => {
+
+  const { id } = req.params;
+
+pieces.findByIdAndDelete(id)
+  .then(() => {
+    res.json('Model Piece!'); // No Content
+  })
+  .catch((error) => {
+    res.status(500).json({ error: 'An error occurred while deleting the Piece' });
+  });
+}

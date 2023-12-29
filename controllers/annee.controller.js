@@ -103,3 +103,16 @@ exports.addNew = (req, res) => {
       .then(() => res.json('Year added!'))
       .catch(err => res.status(400).json('Error: ' + err))
   }
+// DELETE
+exports.deleteById = (req, res) => {
+
+  const { id } = req.params;
+
+annees.findByIdAndDelete(id)
+  .then(() => {
+    res.json('Annee deleted!'); // No Content
+  })
+  .catch((error) => {
+    res.status(500).json({ error: 'An error occurred while deleting the Annee' });
+  });
+}

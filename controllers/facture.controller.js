@@ -39,6 +39,30 @@ exports.addNew = (req, res) => {
 }
 
 
+exports.markFactureAsPaid= async (req, res) => {
+    const { factureId } = req.params;
+    try {
+        const { factureId } = req.params;
+    
+        // Find the Facture document by ID and update the etat field
+        const updatedFacture = await facture.findByIdAndUpdate(
+          factureId,
+          { etat: true },
+          { new: true } // Return the updated document
+        );
+    
+        if (!updatedFacture) {
+          return res.status(404).json({ error: 'Facture not found' });
+        }
+    
+        res.json(updatedFacture);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+}
+
 exports.getById = (req, res) => {
   const { id } = req.params;
 

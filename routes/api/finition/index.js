@@ -11,5 +11,6 @@ router.get('/PieceById/:id', controller.getById)
 router.get('/SearchByAnnee/:anneeName', controller.searchByAnnee)
 // add piece
 router.post('/AddNewFinition', controller.addNew)
-
+// delete exercise by ID
+router.delete('/delete/:id', controller.deleteById)
 module.exports = router

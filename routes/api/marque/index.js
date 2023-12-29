@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
     },
     filename : function (req, file, cb) {
       const ext = file.originalname.split('.').pop();
-      const validExtensions = ['jpg', 'jpeg'];
+      const validExtensions = ['jpg', 'jpeg', 'png'];
     
       if (!validExtensions.includes(ext.toLowerCase())) {
         return cb(new Error('Invalid file extension'));

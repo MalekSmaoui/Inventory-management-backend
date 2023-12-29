@@ -59,3 +59,17 @@ exports.addNew = (req, res) => {
   
     
 }
+
+// DELETE
+exports.deleteById = (req, res) => {
+
+  const { id } = req.params;
+
+modeles.findByIdAndDelete(id)
+  .then(() => {
+    res.json('Model deleted!'); // No Content
+  })
+  .catch((error) => {
+    res.status(500).json({ error: 'An error occurred while deleting the Model' });
+  });
+}

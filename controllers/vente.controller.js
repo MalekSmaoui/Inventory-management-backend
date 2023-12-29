@@ -101,3 +101,15 @@ exports.addNew = async (req, res) => {
   }
 }
 // DELETE
+exports.deleteById = (req, res) => {
+
+  const { id } = req.params;
+
+  ventes.findByIdAndDelete(id)
+  .then(() => {
+    res.json('vente deleted!'); // No Content
+  })
+  .catch((error) => {
+    res.status(500).json({ error: 'An error occurred while deleting the brand' });
+  });
+}

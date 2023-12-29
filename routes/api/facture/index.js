@@ -13,4 +13,6 @@ router.get('/FactureById/:id', controller.getById)
 // delete exercise by ID
 router.delete('/delete/:id', controller.deleteById)
 
+router.put('/mark-as-paid/:factureId',controller.markFactureAsPaid)
+
 module.exports = router

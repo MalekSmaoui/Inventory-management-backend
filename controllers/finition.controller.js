@@ -77,3 +77,16 @@ exports.getAll = (req, res) => {
         
   }
   
+  exports.deleteById = (req, res) => {
+
+    const { id } = req.params;
+  
+  finitions.findByIdAndDelete(id)
+    .then(() => {
+      res.json('Finition deleted!'); // No Content
+    })
+    .catch((error) => {
+      res.status(500).json({ error: 'An error occurred while deleting the Finition' });
+    });
+  }
+  
